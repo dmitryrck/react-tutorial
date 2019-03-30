@@ -2,23 +2,44 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square">
-        {/* TODO */}
-      </button>
-    );
-  }
+function Square(props) {
+  return (
+    <button className="square" onClick={props.onClick}>
+      {props.value}
+    </button>
+  )
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
-    return <Square />;
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      squares: Array(9).fill(null),
+      xIsNext: true,
+    }
+  }
+
+  handleClick(index) {
+    const squares = this.state.squares.slice()
+    squares[index] = this.state.xIsNext ? "X" : "O"
+    this.setState({
+      squares,
+      xIsNext: !this.state.xIsNext,
+    })
+  }
+
+  renderSquare(index) {
+    return(
+      <Square
+        value={this.state.squares[index]}
+        onClick={() => this.handleClick(index)}
+      />
+    )
   }
 
   render() {
-    const status = 'Next player: X';
+    const status = `Next player: ${this.state.xIsNext ? "X" : "O" }`
 
     return (
       <div>
